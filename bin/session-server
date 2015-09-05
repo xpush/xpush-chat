@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+var fs       = require('fs'),
+    argv     = require('optimist').argv,
+    xpush    = require('../lib/index');
+
+var help = [
+    "usage: session-server [options] ",
+    "",
+    "Starts a xpush server using the specified command-line options",
+    "",
+    "options:",
+    "  --port   PORT       Port that the xpush server should run on",
+    "  --config OUTFILE    (mandatory!) Location of the configuration file for the xpush server",
+    "  --host   DOMAIN     Hostname",
+    "  -h, --help          You're staring at it"
+].join('\n');
+
+if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
+  return console.log(help);
+}
+
+var config = {},
+    port = argv.port,
+    server;
+
+try {
+  var data = fs.readFileSync(argv.config);
+  config = JSON.parse(data.toString());
+} catch (ex) {
+  console.error('Error starting xpush server: ' + ex);
+  process.exit(1);
+}
+
+
+var options = {};
+
+if(config.zookeeper) options['zookeeper'] = config.zookeeper;
+if(config.redis) options['redis'] = config.redis;
+if(config.mongodb) options['mongodb'] = config.mongodb;
+if(config.sessionServer) {
+    options['port'] = config.sessionServer.port;
+}
+
+server = xpush.createSessionServer(options);

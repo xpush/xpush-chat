@@ -1,0 +1,11 @@
+{
+  "sessionServer": {
+    "port": 8888
+  },
+  "channelServer": {
+    "port": 9001
+  },
+  "zookeeper": {},
+  "redis": {},
+  "mongodb": {}
+}
