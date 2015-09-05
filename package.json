@@ -1,7 +1,7 @@
 {
   "name": "xpush-chat",
   "version": "0.0.1",
-  "description": "",
+  "description": "chat solution base on XPUSH",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,5 +14,12 @@
   "bugs": {
     "url": "https://github.com/xpush/xpush-chat/issues"
   },
-  "homepage": "https://github.com/xpush/xpush-chat"
+  "homepage": "https://github.com/xpush/xpush-chat",
+  "dependencies": {
+    "xpush": "https://github.com/xpush/node-xpush.git"
+  },
+  "devDependencies": {
+    "faker": "^3.0.1",
+    "socket.io-client": "^1.3.6"
+  }
 }
