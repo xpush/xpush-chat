@@ -68,6 +68,7 @@ describe("Chat Server", function () {
       globalSocket.james.io.on('connect', function (data) {
         done();
       });
+
     });
 
   });
@@ -83,17 +84,24 @@ describe("Chat Server", function () {
     console.log(url);
     channelSocket.james.io = io.connect(url, socketOptions);
 
+    channelSocket.james.io.on('message', function (data) {
+      console.info('(james)', data);
+    });
+
     channelSocket.james.io.on('connect', function (data) {
-      channelSocket.james.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-      //setInterval(function () {}, 1000);
-      done();
+
+      setTimeout(function () {
+        channelSocket.james.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+        done();
+      }, 1500);
+
 
     });
 
 
   });
 
-  it('2-1. (john) Connecting CHANNEL SOCKET', function (done) {
+  it('2-1. (john) Connecting GLOBAL SOCKET', function (done) {
 
     var username = 'john';
 
@@ -109,6 +117,8 @@ describe("Chat Server", function () {
       globalSocket.john.io.on('connect', function (data) {
         done();
       });
+
+
     });
 
   });
@@ -121,18 +131,58 @@ describe("Chat Server", function () {
 
     var query = getQueryChannel(channel, username, servers['john'].result.server.name);
     var url = servers['john'].result.server.url + '/channel?' + query;
-    console.log(url);
+
     channelSocket.john.io = io.connect(url, socketOptions);
 
-    channelSocket.john.io.on('connect', function (data) {
-      channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-      //setInterval(function () {}, 1000);
-      done();
-
+    channelSocket.john.io.on('message', function (data) {
+      console.info('(john)', data);
     });
 
+    channelSocket.john.io.on('connect', function (data) {
+      setTimeout(function () {
+        channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+        done();
+      }, 1500);
+    });
 
   });
 
+
+  it('3-1. (james) disconnect CHANNEL SOCKET', function (done) {
+
+    channelSocket.james.io.disconnect();
+
+    setTimeout(function () {
+      done();
+    }, 800);
+
+  });
+
+
+  it('4-1. (john) send message', function (done) {
+
+    channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'NO': 1, 'MG': faker.lorem.sentence()}});
+    channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'NO': 2, 'MG': faker.lorem.sentence()}});
+    channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'NO': 3, 'MG': faker.lorem.sentence()}});
+    channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'NO': 4, 'MG': faker.lorem.sentence()}});
+
+    setTimeout(function () {
+      channelSocket.john.io.disconnect();
+      done();
+    }, 800);
+
+  });
+
+
+  it('ending.. ', function (done) {
+
+    globalSocket.james.io.disconnect();
+    globalSocket.john.io.disconnect();
+
+    setTimeout(function () {
+      done();
+    }, 1000);
+
+  });
 
 });
