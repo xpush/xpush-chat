@@ -21,7 +21,6 @@ if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
 }
 
 var config = {},
-    port = argv.port,
     server;
 
 try {
@@ -41,5 +40,7 @@ if(config.mongodb) options['mongodb'] = config.mongodb;
 if(config.sessionServer) {
     options['port'] = config.sessionServer.port;
 }
+
+if(argv.port) options['port'] = argv.port;
 
 server = xpush.createSessionServer(options);
