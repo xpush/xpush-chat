@@ -12,7 +12,7 @@ var address = process.argv[2] || '127.0.0.1:8888';
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'APP_TEST';
+var _app = 'APP';
 
 var socketOptions = {
   transsessionPorts: ['websocket'],
@@ -43,6 +43,20 @@ var getQueryGlobal = function (_user) {
 
 };
 
+var users = {
+  'james': {
+    'A': 'app',
+    'D': 'dev1',
+    'U': 'james',
+    'PW': 'password'
+  },
+  'john': {
+    'A': 'app',
+    'D': 'dev1',
+    'U': 'john',
+    'PW': 'password'
+  }
+};
 
 var servers = {};
 
@@ -52,7 +66,35 @@ var channelSocket = {};
 
 describe("Chat Server", function () {
 
-  it('1-1. (james) Connecting GLOBAL SOCKET', function (done) {
+
+  it('0-1. (james) Connecting GLOBAL SOCKET', function (done) {
+
+    var param = users.james;
+    param.DT = {'name': 'James Jung', 'tel': '010-1111-2234'};
+
+    util.post(_host, _port, '/user/update', param, function (err, data) {
+
+      console.error(err, data);
+
+      if (data.status == 'ok') {
+        done();
+      }
+    });
+
+  });
+  it('0-2. (john) ', function (done) {
+
+    var param = users.john;
+    param.DT = {'name': 'John Kim', 'tel': '010-1234-5678'};
+    util.post(_host, _port, '/user/update', param, function (err, data) {
+      if (data.status == 'ok') {
+        done();
+      }
+    });
+
+  });
+
+  it('1-1. (james) ', function (done) {
 
     var username = 'james';
 
