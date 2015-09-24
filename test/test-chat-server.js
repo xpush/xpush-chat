@@ -12,7 +12,7 @@ var address = process.argv[2] || '127.0.0.1:8888';
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'APP';
+var _app = 'app';
 
 var socketOptions = {
   transsessionPorts: ['websocket'],
@@ -45,13 +45,13 @@ var getQueryGlobal = function (_user) {
 
 var users = {
   'james': {
-    'A': 'app',
+    'A': _app,
     'D': 'dev1',
     'U': 'james',
     'PW': 'password'
   },
   'john': {
-    'A': 'app',
+    'A': _app,
     'D': 'dev1',
     'U': 'john',
     'PW': 'password'
