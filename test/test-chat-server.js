@@ -24,7 +24,7 @@ var getQueryChannel = function (_channel, _user, _server, _data) {
   var query = 'A=' + _app + '&' +
     'C=' + _channel + '&' +
     'U=' + _user.replace(/\./g, '') + '&' +
-    'D=' + 'D';
+    'D=' + 'dev1';
 
   if (_server) query = query + '&S=' + _server;
   if (_data) query = query + '&DT=' + _data;
@@ -37,7 +37,7 @@ var getQueryGlobal = function (_user) {
 
   var query = 'A=' + _app + '&' +
     'U=' + _user.replace(/\./g, '') + '&' +
-    'D=' + 'D';
+    'D=' + 'dev1';
 
   return query;
 
@@ -132,11 +132,12 @@ describe("Chat Server", function () {
 
     channelSocket.james.io.on('connect', function (data) {
 
-      setTimeout(function () {
-        channelSocket.james.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-        done();
-      }, 1500);
-
+      channelSocket.james.io.emit('join', {U: 'james'}, function (result) {
+        setTimeout(function () {
+          channelSocket.james.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+          done();
+        }, 1500);
+      });
 
     });
 
@@ -160,7 +161,6 @@ describe("Chat Server", function () {
         done();
       });
 
-
     });
 
   });
@@ -181,10 +181,13 @@ describe("Chat Server", function () {
     });
 
     channelSocket.john.io.on('connect', function (data) {
-      setTimeout(function () {
-        channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-        done();
-      }, 1500);
+
+      channelSocket.john.io.emit('join', {U: 'john'}, function (result) {
+        setTimeout(function () {
+          channelSocket.john.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+          done();
+        }, 1500);
+      });
     });
 
   });
