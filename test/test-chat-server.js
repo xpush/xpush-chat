@@ -122,7 +122,7 @@ describe("Chat Server", function () {
       channelSocket.james.io.on('connect', function (data) {
 
         // channel 에 연결된 이후 john 을 추가 한다.
-        channelSocket.james.io.emit('join', {U: 'john'}, function (result) {
+        channelSocket.james.io.emit('channel.join', {U: 'john'}, function (result) {
 
           setTimeout(function () {
             channelSocket.james.io.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
