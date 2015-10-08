@@ -52,13 +52,35 @@ describe("Chat Server", function () {
     async.parallel(
       [
         function (callback) { // # 1 users.james
+
           util.post(_host, _port, '/user/update', users.james, function (err, data) {
-            if (data.status == 'ok') callback();
+            if (data.status == 'ok'){
+              callback();
+            }else{
+              util.post(_host, _port, '/user/register', user.james, function (err, data) {
+                if (data.status == 'ok'){
+                  callback();
+                } else{
+                  callback(data.status, data.message);
+                }
+              });
+            }
           });
         },
         function (callback) { // # 2 users.john
           util.post(_host, _port, '/user/update', users.john, function (err, data) {
-            if (data.status == 'ok') callback();
+            if (data.status == 'ok'){
+              callback();
+            }else{
+              util.post(_host, _port, '/user/register', user.john, function (err, data) {
+                if (data.status == 'ok'){
+                  callback();
+                } else{
+                  callback(data.status, data.message);
+                }
+              });
+            }
+
           });
         }
       ],

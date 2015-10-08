@@ -3,7 +3,11 @@ var util = require('../test/utils');
 var faker = require('faker');
 var async = require('async');
 
-var address = process.argv[2] || '127.0.0.1:8888';
+
+var device = process.argv[2] || 'dev1';
+
+var address = '127.0.0.1:8888';
+
 
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
@@ -12,13 +16,13 @@ var _app = 'link_stalk.io';
 
 var user = {
   'A': _app,
-  'D': 'dev1',
+  'D': device,
   'U': 'johnkim',
   'PW': 'password',
   'DT': {'name': 'John Kim', 'tel': '010-1234-5678'}
 };
 
-var GLOBAL_SOCKET;
+var GLOBAL_SOCKET = {};
 
 async.series([
 
@@ -48,8 +52,7 @@ async.series([
       var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D;
       GLOBAL_SOCKET = io.connect(data.result.server.url + '/global?' + query, util.socketOptions);
       GLOBAL_SOCKET.on('connect', function (data) {
-        console.log(data);
-        callback(null, data);
+        callback(null);
       });
     });
   },
