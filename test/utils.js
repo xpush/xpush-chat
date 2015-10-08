@@ -65,3 +65,8 @@ exports.post = function( host, port, path, data, cb ){
     console.error(e);
   });
 };
+
+exports.socketOptions = {
+  transsessionPorts: ['websocket'],
+  'force new connection': true
+};

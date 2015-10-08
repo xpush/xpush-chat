@@ -18,28 +18,46 @@ var user = {
   'DT': {'name': 'John Kim', 'tel': '010-1234-5678'}
 };
 
-
+var GLOBAL_SOCKET;
 
 async.series([
-  function(callback){ // 사용자 정보 UPDATE
+
+  function (callback) { // 사용자 정보 UPDATE
+
     util.post(_host, _port, '/user/update', user, function (err, data) {
-      if (data.status == 'ok') callback();
+
+      if (data.status == 'ok'){
+        callback(null, data);
+      } else{
+
+        util.post(_host, _port, '/user/register', user, function (err, data) {
+          if (data.status == 'ok'){
+            callback(null, data);
+          } else{
+            callback(data.status, data.message);
+          }
+        });
+
+      }
     });
+
+
   },
-  function(callback){ // Global Socket 연결
+  function (callback) { // Global Socket 연결
     util.get(_host, _port, '/node/' + _app + '/' + user.U, function (err, data) {
       var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D;
-      globalSocket.james.io = io.connect(data.result.server.url + '/global?' + query, socketOptions);
-      globalSocket.james.io.on('connect', function (data) {
-        callback();
+      GLOBAL_SOCKET = io.connect(data.result.server.url + '/global?' + query, util.socketOptions);
+      GLOBAL_SOCKET.on('connect', function (data) {
+        console.log(data);
+        callback(null, data);
       });
     });
   },
-  function(callback){
-
+  function (callback) {
+    callback(null, 'ENBD');
   }
-]);
+], function (err, results) {
 
+  console.log(err, results);
 
-
-
+});
