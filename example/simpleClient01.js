@@ -12,7 +12,7 @@ var address = '127.0.0.1:8888';
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'link_stalk.io';
+var _app = 'link_stalk_io';
 
 var user = {
   'A': _app,
