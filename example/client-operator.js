@@ -12,12 +12,12 @@ var address = '127.0.0.1:8888';
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'link_stalk_io';
+var _app = 'LISK:STALK_IO';
 
 var user = {
   'A': _app,
   'D': device,
-  'U': 'johnkim',
+  'U': 'john',
   'PW': 'password',
   'DT': {'name': 'John Kim', 'tel': '010-1234-5678'}
 };
@@ -30,14 +30,14 @@ async.series([
 
     util.post(_host, _port, '/user/update', user, function (err, data) {
 
-      if (data.status == 'ok'){
+      if (data.status == 'ok') {
         callback(null, data);
-      } else{
+      } else {
 
         util.post(_host, _port, '/user/register', user, function (err, data) {
-          if (data.status == 'ok'){
+          if (data.status == 'ok') {
             callback(null, data);
-          } else{
+          } else {
             callback(data.status, data.message);
           }
         });
@@ -45,6 +45,18 @@ async.series([
       }
     });
 
+  },
+  function (callback) {
+
+    util.post(_host, _port, '/user/list/active', {A: _app}, function (err, data) {
+
+      if (data.status == 'ok') {
+        console.log(data);
+        callback(null, data);
+      } else {
+        callback(data.status, data);
+      }
+    });
 
   },
   function (callback) { // Global Socket 연결
