@@ -4,6 +4,11 @@ var fs       = require('fs'),
     argv     = require('optimist').argv,
     xpush    = require('../lib/index');
 
+function exit() { process.exit(0); }
+
+process.on('SIGINT', exit);
+process.on('SIGTERM', exit);
+
 var help = [
     "usage: session-server [options] ",
     "",
@@ -43,5 +48,8 @@ if(config.sessionServer) {
 
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
+
+var pid = require('../lib/pid').create(options, 'session.' + options['port']);
+pid.removeOnExit();
 
 server = xpush.createSessionServer(options);

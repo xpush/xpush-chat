@@ -21,8 +21,7 @@
     "mongoose": "^4.1.5",
     "optimist": "^0.6.1",
     "restify": "^4.0.3",
-    "shortid": "^2.2.2",
-    "xpush": "https://github.com/xpush/node-xpush.git"
+    "shortid": "^2.2.2"
   },
   "devDependencies": {
     "faker": "^3.0.1",

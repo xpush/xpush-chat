@@ -4,6 +4,11 @@ var fs       = require('fs'),
     argv     = require('optimist').argv,
     xpush    = require('../lib/index');
 
+function exit() { process.exit(0); }
+
+process.on('SIGINT', exit);
+process.on('SIGTERM', exit);
+
 var help = [
     "usage: session-server [options] ",
     "",
@@ -31,7 +36,6 @@ try {
   process.exit(1);
 }
 
-
 var options = {};
 
 if(config.zookeeper) options['zookeeper'] = config.zookeeper;
@@ -43,5 +47,9 @@ if(config.sessionServer) {
 
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
+
+
+var pid = require('../lib/pid').create(options, 'channel.' + options['port']);
+pid.removeOnExit();
 
 server = xpush.createChannelServer(options);
