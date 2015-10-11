@@ -9,12 +9,28 @@
     "type": "git",
     "url": "https://github.com/xpush/xpush-chat.git"
   },
-  "author": "",
+  "author": [
+    {
+      "name": "John Kim",
+      "email": "yohany@gmail.com"
+    },
+    {
+      "name": "Notdol",
+      "email": "nixenic@gmail.com"
+    },
+    {
+      "name": "James Jung",
+      "email": "0nlyoung7@gmail.com"
+    },
+    {
+      "name": "John Ko",
+      "email": "eunsan.ko@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/xpush/xpush-chat/issues"
   },
-  "homepage": "https://github.com/xpush/xpush-chat",
   "dependencies": {
     "async": "^1.4.2",
     "crypto": "0.0.3",
@@ -28,5 +44,9 @@
     "mocha": "^2.3.0",
     "should": "^7.1.0",
     "socket.io-client": "^1.3.6"
+  },
+  "homepage": "https://github.com/xpush/xpush-chat",
+  "engines": {
+    "node": ">= 4.0.0"
   }
 }

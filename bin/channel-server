@@ -48,7 +48,6 @@ if(config.sessionServer) {
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
 
-
 var pid = require('../lib/pid').create(options, 'channel.' + options['port']);
 pid.removeOnExit();
 
