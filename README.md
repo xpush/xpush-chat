@@ -1,1 +1,2 @@
 # xpush-chat
+npm install
