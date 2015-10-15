@@ -3,11 +3,7 @@
 var fs       = require('fs'),
     argv     = require('optimist').argv,
     xpush    = require('../lib/index');
-
-function exit() { process.exit(0); }
-
-process.on('SIGINT', exit);
-process.on('SIGTERM', exit);
+    utils    = require('../lib/utils');
 
 var help = [
     "usage: session-server [options] ",
@@ -48,7 +44,31 @@ if(config.sessionServer) {
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
 
-var pid = require('../lib/pid').create(options, 'channel.' + options['port']);
-pid.removeOnExit();
+
+// process id
+console.log(process.pid);
+require('child_process').exec('node ' +__dirname+ '/../lib/daemon-xmon',
+    {
+      env: {
+        X_TYPE: 'CHANNEL',
+        X_PID: process.pid,
+        X_PATH: utils.getBaseDirPath(options['home']),
+        X_PORT: options['port']
+      }
+    },
+    function (err, stdout, stderr) {
+      if (err) {
+        throw err;
+      }
+      if (stdout) {
+        console.log('X-DAEMON : '+ stdout);
+      }else if (stderr) {
+        console.error('X-DAEMON : '+ stderr);
+      }else{
+        console.log('X-DAEMON (unknown) : '+ stderr);
+      }
+
+    }
+);
 
 server = xpush.createChannelServer(options);
