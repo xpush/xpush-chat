@@ -2,8 +2,9 @@
 
 var fs       = require('fs'),
     argv     = require('optimist').argv,
-    xpush    = require('../lib/index');
-    utils    = require('../lib/utils');
+    xpush    = require('../lib/index'),
+    utils    = require('../lib/utils'),
+    daemon   = require('../lib/daemon/daemon-handler');
 
 var help = [
     "usage: session-server [options] ",
@@ -16,6 +17,7 @@ var help = [
     "  --host   DOMAIN     Hostname",
     "  -h, --help          You're staring at it"
 ].join('\n');
+
 
 if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
   return console.log(help);
@@ -34,6 +36,8 @@ try {
 
 var options = {};
 
+options['path'] = argv.config;
+
 if(config.zookeeper) options['zookeeper'] = config.zookeeper;
 if(config.redis) options['redis'] = config.redis;
 if(config.mongodb) options['mongodb'] = config.mongodb;
@@ -44,31 +48,6 @@ if(config.sessionServer) {
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
 
-
-// process id
-console.log(process.pid);
-require('child_process').exec('node ' +__dirname+ '/../lib/daemon-xmon',
-    {
-      env: {
-        X_TYPE: 'CHANNEL',
-        X_PID: process.pid,
-        X_PATH: utils.getBaseDirPath(options['home']),
-        X_PORT: options['port']
-      }
-    },
-    function (err, stdout, stderr) {
-      if (err) {
-        throw err;
-      }
-      if (stdout) {
-        console.log('X-DAEMON : '+ stdout);
-      }else if (stderr) {
-        console.error('X-DAEMON : '+ stderr);
-      }else{
-        console.log('X-DAEMON (unknown) : '+ stderr);
-      }
-
-    }
-);
+//daemon.startDaemon(options);
 
 server = xpush.createChannelServer(options);
