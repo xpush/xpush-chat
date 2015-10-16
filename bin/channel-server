@@ -48,6 +48,15 @@ if(config.sessionServer) {
 if(argv.host) options['host'] = argv.host;
 if(argv.port) options['port'] = argv.port;
 
-//daemon.startDaemon(options);
+daemon.startDaemon(options, function(err){
+    if(err){
+        console.error('process daemon was not finished');
+    }else{
 
-server = xpush.createChannelServer(options);
+        // FINALLY STARTING !!
+        server = xpush.createChannelServer(options);
+
+    }
+});
+
+
