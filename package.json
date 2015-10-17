@@ -37,7 +37,8 @@
     "mongoose": "^4.1.5",
     "optimist": "^0.6.1",
     "restify": "^4.0.3",
-    "shortid": "^2.2.2"
+    "shortid": "^2.2.2",
+    "busboy": "^0.2.10"
   },
   "devDependencies": {
     "faker": "^3.0.1",
