@@ -36,7 +36,7 @@ try {
 
 var options = {};
 
-options['path'] = argv.config;
+options['config_path'] = argv.config;
 
 if(config.zookeeper) options['zookeeper'] = config.zookeeper;
 if(config.redis) options['redis'] = config.redis;
@@ -45,12 +45,13 @@ if(config.sessionServer) {
     options['port'] = config.channelServer.port;
 }
 
-if(argv.host) options['host'] = argv.host;
+options['host'] = argv.host || utils.getIP();
 if(argv.port) options['port'] = argv.port;
+
 
 daemon.startDaemon(options, function(err){
     if(err){
-        console.error('process daemon was not finished');
+        console.error('\n\n process daemon was not yet finished \n');
     }else{
 
         // FINALLY STARTING !!
@@ -58,5 +59,3 @@ daemon.startDaemon(options, function(err){
 
     }
 });
-
-
