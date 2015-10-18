@@ -12,7 +12,7 @@ var address = '127.0.0.1:8888';
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'LISK:STALK_IO';
+var _app = 'LINK:STALK_IO';
 
 var _channel = 'channel_12345';
 
@@ -61,19 +61,24 @@ async.series([
   },
   function (callback) {
 
-    util.get(_host, _port, '/node/' + _app + '/' + _channel, function (err, data) {
+    GLOBAL_SOCKET.emit('channel.create', {U: 'james', C: _channel, DT: {text: 'ABCDE'}}, function (result, data) {
 
-      var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D + '&C=' + _channel + '&S=' + data.result.server.name;
-      CHANNEL_SOCKET = io.connect(data.result.server.url + '/channel?' + query, util.socketOptions);
+      console.log('asdfasdadsf');
+      console.log(result, data);
 
-      CHANNEL_SOCKET.on('message', function (data) {
-        console.info(' ** MESSAGE ** ', data);
-      });
 
-      CHANNEL_SOCKET.on('connect', function (data) {
+      util.get(_host, _port, '/node/' + _app + '/' + _channel, function (err, data) {
 
-        // channel 에 연결된 이후 john 을 추가 한다.
-        GLOBAL_SOCKET.emit('channel.create', {U: 'james', DT: {text: 'ABCDE'}}, function (result) {
+        var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D + '&C=' + _channel + '&S=' + data.result.server.name;
+        CHANNEL_SOCKET = io.connect(data.result.server.url + '/channel?' + query, util.socketOptions);
+
+        CHANNEL_SOCKET.on('message', function (data) {
+          console.info(' ** MESSAGE ** ', data);
+        });
+
+        CHANNEL_SOCKET.on('connect', function (data) {
+
+          // channel 에 연결된 이후 john 을 추가 한다.
 
           setTimeout(function () {
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 1, 'MG': faker.lorem.sentence()}});
@@ -85,10 +90,10 @@ async.series([
 
           }, 1500);
 
+
         });
 
       });
-
     });
 
   },

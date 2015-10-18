@@ -42,12 +42,12 @@ var options = {};
 if(config.zookeeper) options['zookeeper'] = config.zookeeper;
 if(config.redis) options['redis'] = config.redis;
 if(config.mongodb) options['mongodb'] = config.mongodb;
-if(config.sessionServer) {
-    options['port'] = config.sessionServer.port;
-}
 
 options['host'] = argv.host || utils.getIP();
 options['port'] = argv.port || 8080;
+if(config.sessionServer) {
+    options['port'] = config.sessionServer.port;
+}
 
 var pidFilePath = utils.getPidFilePath(options['home'], 'SESSION', options['port']);
 
