@@ -73,7 +73,7 @@ async.series([
       CHANNEL_SOCKET.on('connect', function (data) {
 
         // channel 에 연결된 이후 john 을 추가 한다.
-        CHANNEL_SOCKET.emit('channel.create', {U: 'james', DT: {text: 'ABCDE'}}, function (result) {
+        GLOBAL_SOCKET.emit('channel.create', {U: 'james', DT: {text: 'ABCDE'}}, function (result) {
 
           setTimeout(function () {
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 1, 'MG': faker.lorem.sentence()}});
