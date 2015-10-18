@@ -63,10 +63,6 @@ async.series([
 
     GLOBAL_SOCKET.emit('channel.create', {U: 'james', C: _channel, DT: {text: 'ABCDE'}}, function (result, data) {
 
-      console.log('asdfasdadsf');
-      console.log(result, data);
-
-
       util.get(_host, _port, '/node/' + _app + '/' + _channel, function (err, data) {
 
         var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D + '&C=' + _channel + '&S=' + data.result.server.name;
@@ -78,18 +74,15 @@ async.series([
 
         CHANNEL_SOCKET.on('connect', function (data) {
 
-          // channel 에 연결된 이후 john 을 추가 한다.
-
           setTimeout(function () {
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 1, 'MG': faker.lorem.sentence()}});
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 2, 'MG': faker.lorem.sentence()}});
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 3, 'MG': faker.lorem.sentence()}});
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 4, 'MG': faker.lorem.sentence()}});
 
-            callback(null, result);
+            callback(null);
 
           }, 1500);
-
 
         });
 
