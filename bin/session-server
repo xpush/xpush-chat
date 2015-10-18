@@ -44,10 +44,12 @@ if(config.redis) options['redis'] = config.redis;
 if(config.mongodb) options['mongodb'] = config.mongodb;
 
 options['host'] = argv.host || utils.getIP();
-options['port'] = argv.port || 8080;
+options['port'] = 8080;
 if(config.sessionServer) {
     options['port'] = config.sessionServer.port;
 }
+
+if(argv.port) options['port'] = argv.port;
 
 var pidFilePath = utils.getPidFilePath(options['home'], 'SESSION', options['port']);
 
