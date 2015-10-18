@@ -66,6 +66,9 @@ async.series([
       GLOBAL_SOCKET.on('connect', function (data) {
         callback(null);
       });
+      GLOBAL_SOCKET.on('message', function (data) {
+        console.info(' ** MESSAGE (GS) ** ', data);
+      });
     });
   },
   function (callback) {
