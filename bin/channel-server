@@ -52,6 +52,9 @@ if(argv.port) options['port'] = argv.port;
 daemon.startDaemon(options, function(err){
     if(err){
         console.error('\n\n process daemon was not yet finished \n');
+        if(err.code == 'PID_EXISTED') {
+            console.info(err.message);
+        }
     }else{
 
         // FINALLY STARTING !!
