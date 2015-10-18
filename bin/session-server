@@ -46,7 +46,16 @@ if(config.sessionServer) {
     options['port'] = config.sessionServer.port;
 }
 
-if(argv.host) options['host'] = argv.host;
-if(argv.port) options['port'] = argv.port;
+options['host'] = argv.host || utils.getIP();
+options['port'] = argv.port || 8080;
+
+var pidFilePath = utils.getPidFilePath(options['home'], 'SESSION', options['port']);
+
+if (fs.existsSync(pidFilePath)) {
+    fs.unlinkSync(pidFilePath);
+}
+
+var pid = require('../lib/pid').create(pidFilePath);
+pid.removeOnExit();
 
 server = xpush.createSessionServer(options);
