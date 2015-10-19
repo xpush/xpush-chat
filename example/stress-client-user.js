@@ -3,8 +3,8 @@ var io = require('../node_modules/socket.io-client'),
   faker = require('faker');
 
 /************************
- 로컬의 8000 포트의 Session 서버를 통해서 100개의 Channel 을 연결하고 메시지를 보내기
- USAGE : node stressTest.js 127.0.0.1:8000 100
+ 로컬의 8888 포트의 Session 서버를 통해서 100개의 Channel 을 연결하고 메시지를 보내기
+ USAGE : node stress-client-user.js 127.0.0.1:8888 10 10
  *************************/
 
 var address = process.argv[2];        // session 서버 주소
@@ -29,13 +29,13 @@ var run = function () {
 
   utils.get(_host, _port, '/node/' + app + '/' + channel, function (err, data) {
 
-    if(err) {
+    if (err) {
       console.error(err);
       return;
     }
 
     var query =
-      'option=autoLeave&' +
+      //'option=autoLeave&' +
       'A=' + app + '&' +
       'U=' + userId + '&' +
       'D=' + '_' + '&' +
@@ -50,9 +50,13 @@ var run = function () {
       console.log(count_connected + '. connected');
       count_connected = count_connected + 1;
 
-      setInterval(function () {
-        channelSocket.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-      }, 2000);
+      channelSocket.emit('channel.join', {U: 'john'}, function (err) {
+        setInterval(function () {
+          channelSocket.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+        }, 2000);
+
+      });
+
 
     });
 
