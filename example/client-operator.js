@@ -22,6 +22,8 @@ var user = {
   'DT': {'name': 'John Kim', 'tel': '010-1234-5678'}
 };
 
+var isConnected = false;
+
 var GLOBAL_SOCKET = {};
 
 async.series([
@@ -64,7 +66,12 @@ async.series([
       var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D;
       GLOBAL_SOCKET = io.connect(data.result.server.url + '/global?' + query, util.socketOptions);
       GLOBAL_SOCKET.on('connect', function (data) {
-        callback(null);
+
+        if (!isConnected) { // 재연결 되는 경우를 고려함 !
+          isConnected = true;
+          callback(null);
+        }
+
       });
       GLOBAL_SOCKET.on('message', function (data) {
         console.info(' ** MESSAGE (GS) ** ', data);

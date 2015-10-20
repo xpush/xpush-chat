@@ -27,6 +27,9 @@ var user = {
 var GLOBAL_SOCKET;
 var CHANNEL_SOCKET;
 
+var isGlobalConnected = false;
+var isChannelConnected = false;
+
 async.series([
 
   function (callback) { // 사용자 정보 UPDATE
@@ -55,7 +58,10 @@ async.series([
       GLOBAL_SOCKET = io.connect(data.result.server.url + '/global?' + query, util.socketOptions);
       GLOBAL_SOCKET.on('connect', function (data) {
         console.log('Glocal Socket 연결 ! ');
-        callback(null);
+        if (!isGlobalConnected) { // 재연결 되는 경우를 고려함 !
+          isGlobalConnected = true;
+          callback(null);
+        }
       });
     });
   },
@@ -80,7 +86,10 @@ async.series([
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 3, 'MG': faker.lorem.sentence()}});
             CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 4, 'MG': faker.lorem.sentence()}});
 
-            callback(null);
+            if (!isChannelConnected) { // 재연결 되는 경우를 고려함 !
+              isChannelConnected = true;
+              callback(null);
+            }
 
           }, 1500);
 
