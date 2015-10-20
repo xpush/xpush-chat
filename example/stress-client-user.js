@@ -51,12 +51,15 @@ var run = function () {
       count_connected = count_connected + 1;
 
       channelSocket.emit('channel.join', {U: 'john'}, function (err) {
-        setInterval(function () {
-          channelSocket.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
-        }, 2000);
+
+        if (err) console.error(err)
+        {
+          setInterval(function () {
+            channelSocket.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
+          }, 1500);
+        }
 
       });
-
 
     });
 
@@ -74,19 +77,9 @@ var run = function () {
       count_disconnected = count_disconnected + 1;
     });
 
-
-    /*setTimeout(function () {
-     CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 1, 'MG': faker.lorem.sentence()}});
-     CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 2, 'MG': faker.lorem.sentence()}});
-     CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 3, 'MG': faker.lorem.sentence()}});
-     CHANNEL_SOCKET.emit('send', {'NM': 'message', 'DT': {'NO': 4, 'MG': faker.lorem.sentence()}});
-     }, 1500); */
-
   });
 
-
 };
-
 
 for (var a = 0; a < count; a++) {
   run();
