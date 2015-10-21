@@ -38,7 +38,8 @@
     "optimist": "^0.6.1",
     "restify": "^4.0.3",
     "shortid": "^2.2.2",
-    "busboy": "^0.2.10"
+    "busboy": "^0.2.10",
+    "send": "^0.13.0"
   },
   "devDependencies": {
     "faker": "^3.0.1",
