@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "async": "^1.4.2",
-    "crypto": "0.0.3",
+    "crypto": "^0.0.3",
     "mongoose": "^4.1.5",
     "optimist": "^0.6.1",
     "restify": "^4.0.3",
