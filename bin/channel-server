@@ -47,6 +47,9 @@ if(config.sessionServer) {
 
 options['host'] = argv.host || utils.getIP();
 if(argv.port) options['port'] = argv.port;
+if(config.apps){
+  options['apps'] = config.apps;
+}
 
 
 daemon.startDaemon(options, function(err){

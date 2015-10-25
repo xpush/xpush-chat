@@ -39,7 +39,8 @@
     "restify": "^4.0.3",
     "shortid": "^2.2.2",
     "busboy": "^0.2.10",
-    "send": "^0.13.0"
+    "send": "^0.13.0",
+    "node-gcm": "^0.12.0"
   },
   "devDependencies": {
     "faker": "^3.0.1",
