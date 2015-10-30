@@ -35,7 +35,6 @@ var run = function () {
     }
 
     var query =
-      //'option=autoLeave&' +
       'A=' + app + '&' +
       'U=' + userId + '&' +
       'D=' + '_' + '&' +
@@ -52,8 +51,9 @@ var run = function () {
 
       channelSocket.emit('channel.join', {U: 'john'}, function (err) {
 
-        if (err) console.error(err)
-        {
+        if (err) {
+          console.error(err)
+        } else {
           setInterval(function () {
             channelSocket.emit('send', {'NM': 'message', 'DT': {'MG': faker.lorem.sentence()}});
           }, 1500);

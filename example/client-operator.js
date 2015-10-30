@@ -2,17 +2,20 @@ var io = require('socket.io-client');
 var util = require('../test/utils');
 var faker = require('faker');
 var async = require('async');
+var argv     = require('optimist').argv;
 
-
-var device = process.argv[2] || 'dev1';
-
-var address = '127.0.0.1:8888';
-
+var device = argv.device || 'dev1';
+var address = argv.address || '127.0.0.1:8888';
+var _app = argv.app || 'LINK:STALK_IO';
 
 var _host = address.substr(0, address.indexOf(':'));
 var _port = Number(address.substr(address.indexOf(':') + 1));
 
-var _app = 'LINK:STALK_IO';
+console.log('\n --------------------------------- ');
+console.log(' - address : '+address);
+console.log(' - device : '+device);
+console.log(' - app : '+_app);
+console.log(' --------------------------------- \n');
 
 var user = {
   'A': _app,
@@ -62,7 +65,9 @@ async.series([
 
   },
   function (callback) { // Global Socket 연결
+
     util.get(_host, _port, '/node/' + _app + '/' + user.U, function (err, data) {
+
       var query = 'A=' + user.A + '&U=' + user.U + '&D=' + user.D;
       GLOBAL_SOCKET = io.connect(data.result.server.url + '/global?' + query, util.socketOptions);
       GLOBAL_SOCKET.on('connect', function (data) {
