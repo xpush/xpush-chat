@@ -4,7 +4,7 @@ var io = require('../node_modules/socket.io-client'),
 
 /************************
  로컬의 8888 포트의 Session 서버를 통해서 100개의 Channel 을 연결하고 메시지를 보내기
- USAGE : node stress-client-user.js 127.0.0.1:8888 10 10
+ USAGE : node stress-client-user.js 127.0.0.1:8000 10 10
  *************************/
 
 var address = process.argv[2];        // session 서버 주소

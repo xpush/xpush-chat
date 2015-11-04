@@ -5,7 +5,7 @@ var async = require('async');
 var argv     = require('optimist').argv;
 
 var device = argv.device || 'dev1';
-var address = argv.address || '127.0.0.1:8888';
+var address = argv.address || '127.0.0.1:8000';
 var _app = argv.app || 'LINK:STALK_IO';
 
 var _host = address.substr(0, address.indexOf(':'));

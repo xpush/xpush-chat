@@ -1,6 +1,6 @@
 {
   "sessionServer": {
-    "port": 8888
+    "port": 8000
   },
   "channelServer": {
     "port": 9001

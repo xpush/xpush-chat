@@ -1,7 +1,7 @@
 var util = require('../test/utils');
 var argv = require('optimist').argv;
 
-var address = '127.0.0.1:8888';
+var address = '127.0.0.1:8000';
 
 
 var _host = address.substr(0, address.indexOf(':'));
