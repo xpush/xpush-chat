@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
-var fs       = require('fs'),
-    argv     = require('optimist').argv,
-    xpush    = require('../lib/index'),
-    utils    = require('../lib/utils'),
-    daemon   = require('../lib/daemon/daemon-handler');
+var fs = require('fs'),
+  argv = require('optimist').argv,
+  xpush = require('../lib/index'),
+  utils = require('../lib/utils'),
+  net = require('net'),
+  daemon = require('../lib/daemon/daemon-handler');
 
 var help = [
-    "usage: session-server [options] ",
-    "",
-    "Starts a xpush server using the specified command-line options",
-    "",
-    "options:",
-    "  --port   PORT       Port that the xpush server should run on",
-    "  --config OUTFILE    (mandatory!) Location of the configuration file for the xpush server",
-    "  --host   DOMAIN     Hostname",
-    "  -h, --help          You're staring at it"
+  "usage: session-server [options] ",
+  "",
+  "Starts a xpush server using the specified command-line options",
+  "",
+  "options:",
+  "  --port   PORT       Port that the xpush server should run on",
+  "  --config OUTFILE    (mandatory!) Location of the configuration file for the xpush server",
+  "  --host   DOMAIN     Hostname",
+  "  -h, --help          You're staring at it"
 ].join('\n');
 
 
@@ -24,7 +25,24 @@ if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
 }
 
 var config = {},
-    server;
+  server;
+
+var startServer = function () {
+
+  daemon.startDaemon(options, function (err) {
+    if (err) {
+      console.error('\n\n process daemon was not yet finished \n');
+      if (err.code == 'PID_EXISTED') {
+        console.info(err.message);
+      }
+    } else {
+
+      // FINALLY STARTING !!
+      server = xpush.createChannelServer(options);
+
+    }
+  });
+};
 
 try {
   var data = fs.readFileSync(argv.config);
@@ -38,30 +56,56 @@ var options = {};
 
 options['config_path'] = argv.config;
 
-if(config.zookeeper) options['zookeeper'] = config.zookeeper;
-if(config.redis) options['redis'] = config.redis;
-if(config.mongodb) options['mongodb'] = config.mongodb;
-if(config.sessionServer) {
-    options['port'] = config.channelServer.port;
-}
+if (config.zookeeper) options['zookeeper'] = config.zookeeper;
+if (config.redis) options['redis'] = config.redis;
+if (config.mongodb) options['mongodb'] = config.mongodb;
+if (config.apps) options['apps'] = config.apps;
 
+// set host
 options['host'] = argv.host || utils.getIP();
-if(argv.port) options['port'] = argv.port;
-if(config.apps){
-  options['apps'] = config.apps;
+
+// set port
+options['port'] = 9000; // default port
+var isSpecifiedPort = false;
+if (config.channelServer) {
+  options['port'] = config.channelServer.port;
+  isSpecifiedPort = true;
+}
+if (argv.port) {
+  options['port'] = argv.port;
+  isSpecifiedPort = true;
+}
+
+if (!isSpecifiedPort) {
+
+  var checkPort = function (callback, port) {
+    port = port || 9000;
+
+    var tester = net.createServer()
+      .once('error', function (err) {
+
+        checkPort(callback, port + 100);
+        /* TODO  if (err.code != 'EADDRINUSE') . . . . . . */
+
+      })
+      .once('listening', function () {
+        tester.once('close', function () {
+            callback(port);
+          })
+          .close();
+      })
+      .listen(port);
+  };
+
+  checkPort(function (port) {
+    options['port'] = port;
+    startServer();
+  });
+
+} else {
+  startServer();
 }
 
 
-daemon.startDaemon(options, function(err){
-    if(err){
-        console.error('\n\n process daemon was not yet finished \n');
-        if(err.code == 'PID_EXISTED') {
-            console.info(err.message);
-        }
-    }else{
 
-        // FINALLY STARTING !!
-        server = xpush.createChannelServer(options);
 
-    }
-});

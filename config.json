@@ -2,9 +2,6 @@
   "sessionServer": {
     "port": 8000
   },
-  "channelServer": {
-    "port": 9001
-  },
   "zookeeper": {},
   "redis": {},
   "mongodb": {}
