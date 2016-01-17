@@ -45,7 +45,7 @@ var startServer = function () {
   });
 };
 
-if(argv.config) {
+if (argv.config) {
   try {
     var data = fs.readFileSync(argv.config);
     config = JSON.parse(data.toString());
@@ -108,7 +108,3 @@ if (!isSpecifiedPort) {
 } else {
   startServer();
 }
-
-
-
-
