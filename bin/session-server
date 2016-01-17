@@ -17,24 +17,26 @@ var help = [
     "",
     "options:",
     "  --port   PORT       Port that the xpush server should run on",
-    "  --config OUTFILE    (mandatory!) Location of the configuration file for the xpush server",
+    "  --config OUTFILE    Location of the configuration file for the xpush server",
     "  --host   DOMAIN     Hostname",
     "  -h, --help          You're staring at it"
 ].join('\n');
 
-if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
+if (argv.h || argv.help /*|| Object.keys(argv).length === 2 || !argv.config*/) {
   return console.log(help);
 }
 
 var config = {},
     server;
 
-try {
-  var data = fs.readFileSync(argv.config);
-  config = JSON.parse(data.toString());
-} catch (ex) {
-  console.error('Error starting xpush server: ' + ex);
-  process.exit(1);
+if(argv.config) {
+  try {
+    var data = fs.readFileSync(argv.config);
+    config = JSON.parse(data.toString());
+  } catch (ex) {
+    console.error('Error starting xpush server: ' + ex);
+    process.exit(1);
+  }
 }
 
 var options = {};
@@ -50,6 +52,8 @@ if(config.sessionServer) {
 }
 
 if(argv.port) options['port'] = argv.port;
+
+console.log(options);
 
 var pidFilePath = utils.getPidFilePath(options['home'], 'SESSION', options['port']);
 
