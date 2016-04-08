@@ -4,5 +4,6 @@
   },
   "zookeeper": {},
   "redis": {},
-  "mongodb": {}
+  "mongodb": {},
+  "cassandra":{"address":["localhost:9042"]}
 }
