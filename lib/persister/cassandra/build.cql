@@ -1,1 +1,0 @@
-CREATE KEYSPACE XCHAT WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
